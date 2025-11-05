@@ -98,18 +98,17 @@ GOOGLE_CLOUD_LOCATION=us-central1
 ```
 
 ### Data Setup
-Large data files are **not in git**. See `data/README.md` for download instructions.
 
-Quick setup:
+You only need **5 contract files** (not the full 270MB CUAD dataset) for testing:
+
 ```bash
-# Download CUAD dataset
-git clone https://github.com/TheAtticusProject/cuad.git /tmp/cuad
-
-# Copy data files
-cp /tmp/cuad/data/CUAD_v1.json data/
-cp /tmp/cuad/data/master_clauses.csv data/
-cp -r /tmp/cuad/data/full_contract_txt data/
+# Run setup script to extract test contracts
+./scripts/setup_test_contracts.sh
 ```
+
+This copies the 5 contracts needed for the 6 test questions to `data/test_contracts/` (~650KB total).
+
+**Note:** The full CUAD dataset with 510 contracts is NOT needed for these tests.
 
 ## Running Tests (Current Focus)
 

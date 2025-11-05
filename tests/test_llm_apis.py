@@ -23,8 +23,11 @@ class LawstronautTester:
         self.openai_key = openai_key or os.getenv('OPENAI_API_KEY')
         self.anthropic_key = anthropic_key or os.getenv('ANTHROPIC_API_KEY')
 
-        # Find contract data directory
-        self.data_dir = Path(__file__).parent.parent / 'data' / 'full_contract_txt'
+        # Find contract data directory - try test_contracts first, fall back to full_contract_txt
+        self.data_dir = Path(__file__).parent.parent / 'data' / 'test_contracts'
+        if not self.data_dir.exists():
+            # Fall back to full dataset if test_contracts doesn't exist
+            self.data_dir = Path(__file__).parent.parent / 'full_contract_txt'
 
     def read_contract(self, contract_filename: str) -> str:
         """

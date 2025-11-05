@@ -1,68 +1,67 @@
-# CUAD Dataset - Legal Contracts
+# Test Contracts for Lawstronaut
 
-This directory contains the Contract Understanding Atticus Dataset (CUAD) v1.
+This directory contains the specific legal contracts used for testing Gemini with Vertex AI.
 
-## Large Data Files (Not in Git)
+## Test Contracts (Small - Already Included)
 
-The following files are **NOT tracked in git** due to their size (270MB+ total):
+You **only need 5 contracts** for the 6 test questions (Q1A and Q1B share one contract):
 
 ```
-data/
-├── CUAD_v1.json (40MB) - SQuAD format dataset
-├── master_clauses.csv (3.8MB) - Contract metadata and clause labels
-├── full_contract_pdf/ (~200MB) - 510 PDF contracts
-├── full_contract_txt/ (26MB) - 510 text contracts
-└── label_group_xlsx/ - CUAD clause label groups
+data/test_contracts/
+├── FOUNDATIONMEDICINE,INC_02_02_2015-EX-10.2-Collaboration Agreement.txt
+├── WPPPLC_04_30_2020-EX-4.28-SERVICE AGREEMENT.txt
+├── CardlyticsInc_20180112_S-1_EX-10.16_11002987_EX-10.16_Maintenance Agreement1.txt
+├── UpjohnInc_20200121_10-12G_EX-2.6_11948692_EX-2.6_Manufacturing Agreement_ Supply Agreement.txt
+└── MEDALISTDIVERSIFIEDREIT,INC_05_18_2020-EX-10.1-CONSULTING AGREEMENT.txt
 ```
 
-## How to Get the Data
+**Total size:** ~650KB (not 270MB!)
 
-### Option 1: Download from CUAD Repository
+## Quick Setup
+
+If the test contracts aren't already in `data/test_contracts/`, run:
+
+```bash
+# From project root
+./scripts/setup_test_contracts.sh
+```
+
+This extracts just the 5 needed contracts from the full CUAD dataset.
+
+## Test Questions Mapping
+
+- **Q1A** (Data Processing) → Foundation Medicine contract
+- **Q1B** (Data Governance) → Foundation Medicine contract (same file)
+- **Q2A** (Brexit) → WPP PLC contract
+- **Q3A** (California Data) → Cardlytics contract
+- **Q4A** (ESG) → Upjohn contract
+- **Q5A** (Non-Compete) → Medalist Diversified contract
+
+## Full CUAD Dataset (Optional)
+
+If you need the complete dataset (510 contracts, 270MB):
 
 ```bash
 # Clone the original CUAD repository
 git clone https://github.com/TheAtticusProject/cuad.git /tmp/cuad
 
-# Copy data files to this project
+# Copy full dataset
+cp -r /tmp/cuad/data/full_contract_txt ../
 cp /tmp/cuad/data/CUAD_v1.json data/
 cp /tmp/cuad/data/master_clauses.csv data/
-cp -r /tmp/cuad/data/full_contract_pdf data/
-cp -r /tmp/cuad/data/full_contract_txt data/
-cp -r /tmp/cuad/data/label_group_xlsx data/
 ```
 
-### Option 2: Download Individual Files
+### CUAD Dataset Structure
 
-If you already have the CUAD data elsewhere, simply copy/move the files to this `data/` directory.
+- **CUAD_v1.json** - SQuAD 2.0 format, 510 contracts with Q&A pairs
+- **master_clauses.csv** - Contract metadata and 41 clause types
+- **full_contract_txt/** - Plain text versions of all 510 contracts
+- **full_contract_pdf/** - Original PDF contracts
 
-## Data Structure
-
-### CUAD_v1.json
-- SQuAD 2.0 format
-- 510 contracts with question-answer pairs
-- 41 legal clause categories
-
-### master_clauses.csv
-- One row per contract
-- Columns for each of 41 clause types
-- Metadata: parties, dates, governing law
-
-### full_contract_txt/
-- Plain text versions of all contracts
-- Used for testing LLM analysis
-
-### full_contract_pdf/
-- Original PDF contracts
-- Organized by contract type subdirectories
-
-## CUAD Dataset License
+## License
 
 The CUAD dataset is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
 
-Original dataset: https://github.com/TheAtticusProject/cuad
-
-## References
-
-For more information about the CUAD dataset, see:
-- `CUAD_v1_README.txt` (original dataset documentation)
-- https://www.atticusprojectai.org/cuad
+- Original dataset: https://github.com/TheAtticusProject/cuad
+- More info: https://www.atticusprojectai.org/cuad
+- Documentation: `CUAD_v1_README.txt`
