@@ -1,0 +1,40 @@
+# Ignore files for Cloud Build
+.git
+.gitignore
+.env
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Ignore output files
+*.json
+*.csv
+*.log
+*.txt.bak
+
+# Ignore documentation
+*.md
+!README.md
+*.docx
+
+# Ignore test data (PDFs and extracted text)
+*.pdf
+*.PDF
+*Agreement*.txt
+*CONTRACT*.txt
+*CONSULTING*.txt
+
+# Keep only essential contract files needed for testing
+!FOUNDATIONMEDICINE,INC_02_02_2015-EX-10.2-Collaboration Agreement.txt
+!WPPPLC_04_30_2020-EX-4.28-SERVICE AGREEMENT.txt
+!CardlyticsInc_20180112_S-1_EX-10.16_11002987_EX-10.16_Maintenance Agreement1.txt
+!UpjohnInc_20200121_10-12G_EX-2.6_11948692_EX-2.6_Manufacturing Agreement_ Supply Agreement.txt
+!MEDALISTDIVERSIFIEDREIT,INC_05_18_2020-EX-10.1-CONSULTING AGREEMENT.txt
