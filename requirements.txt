@@ -1,0 +1,18 @@
+# Core dependencies for Lawstronaut CUAD project
+# Legal contract intelligence using LLMs with regulatory retrieval
+
+# Google Gemini / Vertex AI
+google-genai>=1.0.0
+
+# Data handling
+pandas>=2.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Optional: Other LLM APIs (for comparison)
+# openai>=1.0.0
+# anthropic>=0.18.0
+
+# Optional: Backend (if implementing)
+# supabase>=2.0.0

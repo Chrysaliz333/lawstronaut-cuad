@@ -37,32 +37,45 @@ What doesn't exist:
 ```
 lawstronaut-cuad/
 ├── README.md                          # This file
-├── LAWSTRONAUT_TEST_MATRIX.md        # Detailed test questions (893 lines)
-├── SUPABASE_SETUP.md                 # Proposed backend architecture
-├── CUAD_v1_README.txt                # Dataset documentation
+├── requirements.txt                   # Python dependencies
+├── .gitignore                         # Git ignore patterns
+├── CLEANUP_PLAN.md                    # Cleanup documentation
 │
-├── data/                             # Large data files (not in git)
-│   ├── CUAD_v1.json                  # 40MB - SQuAD format dataset
-│   ├── master_clauses.csv            # 3.8MB - Contract metadata
-│   ├── full_contract_pdf/            # 510 PDF contracts
-│   ├── full_contract_txt/            # 510 text contracts
-│   └── label_group_xlsx/             # CUAD clause labels
+├── src/                               # Application source code
+│   └── lawstronaut/
+│       └── __init__.py
 │
-├── tests/                            # Test harness code
-│   ├── test_gemini_vertex.py        # Vertex AI + search grounding
-│   ├── VERTEX_AI_APPLICATION_PROMPT.md
-│   └── PROJECT_SUMMARY.md           # Gemini evaluation results
+├── tests/                             # Test harness code
+│   ├── __init__.py
+│   ├── test_llm_apis.py              # Base LLM tester class
+│   └── test_gemini_vertex.py         # Vertex AI + Google Search grounding
 │
-├── deploy/                           # GCP deployment (incomplete)
+├── docs/                              # Documentation
+│   ├── PROJECT_SUMMARY.md            # Gemini evaluation results
+│   ├── VERTEX_AI_APPLICATION_PROMPT.md  # Vertex AI setup guide
+│   ├── LAWSTRONAUT_TEST_MATRIX.md    # Detailed test questions (893 lines)
+│   ├── SUPABASE_SETUP.md             # Proposed backend architecture
+│   └── questions.xlsx                # Test questions spreadsheet
+│
+├── data/                              # Large data files (NOT in git)
+│   ├── README.md                     # Data download instructions
+│   ├── CUAD_v1_README.txt            # Dataset documentation
+│   ├── CUAD_v1.json                  # 40MB - SQuAD format dataset (ignored)
+│   ├── master_clauses.csv            # 3.8MB - Contract metadata (ignored)
+│   ├── full_contract_pdf/            # 510 PDF contracts (ignored)
+│   ├── full_contract_txt/            # 510 text contracts (ignored)
+│   └── label_group_xlsx/             # CUAD clause labels (ignored)
+│
+├── deploy/                            # GCP deployment (incomplete)
+│   ├── README.md                     # Deployment notes
 │   ├── Dockerfile
 │   ├── cloudbuild.yaml
 │   └── setup-gcp.sh
 │
-└── docs/                             # Additional documentation
-    └── Lawstronaut questions.xlsx    # Test questions spreadsheet
+└── scripts/                           # Utility scripts (TODO)
 ```
 
-## Setup (Incomplete)
+## Setup
 
 ### Prerequisites
 ```bash
@@ -70,40 +83,69 @@ lawstronaut-cuad/
 python -m venv venv
 source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 
-# Install dependencies (TODO: create requirements.txt)
-pip install google-genai pandas python-dotenv
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ### Environment Variables
-Create `.env` file:
+Create `.env` file in project root:
 ```bash
 GOOGLE_CLOUD_PROJECT=your-project-id
 GOOGLE_CLOUD_LOCATION=us-central1
-OPENAI_API_KEY=sk-...
+# Optional:
+# OPENAI_API_KEY=sk-...
+# ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ### Data Setup
-Large data files are **not in git**. Download separately:
-- CUAD dataset: https://github.com/TheAtticusProject/cuad
-- Place in `data/` directory
+Large data files are **not in git**. See `data/README.md` for download instructions.
 
-## Testing Gemini (Current Focus)
-
+Quick setup:
 ```bash
-cd tests/
-python test_gemini_vertex.py --questions=5A --rate-limit=15
+# Download CUAD dataset
+git clone https://github.com/TheAtticusProject/cuad.git /tmp/cuad
+
+# Copy data files
+cp /tmp/cuad/data/CUAD_v1.json data/
+cp /tmp/cuad/data/master_clauses.csv data/
+cp -r /tmp/cuad/data/full_contract_txt data/
 ```
 
-**Key Finding**: Free Gemini API lacks Google Search grounding, missing 2024 regulations. Vertex AI required for production legal analysis.
+## Running Tests (Current Focus)
 
-## Known Issues
+### Test Gemini with Vertex AI
 
-1. **No proper Python package** - scattered scripts, no imports
-2. **Missing dependencies** - no requirements.txt
-3. **Incomplete test suite** - test_llm_apis.py doesn't exist
-4. **Data files in git** - should use Git LFS or external storage
-5. **Mixed concerns** - GCP deployment mixed with research code
-6. **No application code** - only test harnesses
+```bash
+# Authenticate with Google Cloud
+gcloud auth application-default login
+
+# Run all 6 test questions
+python tests/test_gemini_vertex.py --questions=all
+
+# Run specific question (e.g., Q5A - Non-compete)
+python tests/test_gemini_vertex.py --questions=5A --rate-limit=15
+```
+
+### Test Questions
+
+1. **Q1A**: Data Processing Permissions (GDPR, EU AI Act)
+2. **Q1B**: Data Governance Compliance (EU AI Act Article 10)
+3. **Q2A**: Brexit Amendments (UK REUL Act 2023)
+4. **Q3A**: California Data Protection (CPRA, ADMT regs)
+5. **Q4A**: ESG Compliance (EU CSDDD)
+6. **Q5A**: Non-Compete Validity (FTC ban)
+
+**Key Finding**: Free Gemini API lacks Google Search grounding, missing 2024 regulations. Vertex AI required for production legal analysis. See `docs/PROJECT_SUMMARY.md` for details.
+
+## Known Issues / Limitations
+
+1. ✅ ~~No proper Python package~~ - **FIXED**: Proper structure created
+2. ✅ ~~Missing dependencies~~ - **FIXED**: requirements.txt created
+3. ✅ ~~Data files in git~~ - **FIXED**: Large files now gitignored
+4. ✅ ~~Messy structure~~ - **FIXED**: Reorganized with clear directories
+5. **Incomplete test suite** - Only Gemini test implemented (OpenAI, Claude TBD)
+6. **No application code** - Only test harnesses, no production app
+7. **GCP deployment incomplete** - Deployment configs are placeholders
 
 ## Next Steps (Proposed)
 
