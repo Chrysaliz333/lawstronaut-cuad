@@ -1,0 +1,51 @@
+# Cloud Build configuration for running Gemini tests
+# This runs automatically when you push to GitHub (if trigger is set up)
+
+steps:
+  # Step 1: Install Python dependencies
+  - name: 'python:3.11'
+    entrypoint: 'pip'
+    args: ['install', '-r', 'requirements.txt', '--user']
+
+  # Step 2: Set up environment variables
+  - name: 'python:3.11'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cat > .env << EOF
+        GOOGLE_CLOUD_PROJECT=$PROJECT_ID
+        GOOGLE_CLOUD_LOCATION=us-central1
+        EOF
+        cat .env
+
+  # Step 3: Run Q5A test (critical test)
+  - name: 'python:3.11'
+    entrypoint: 'python'
+    args: ['tests/test_gemini_vertex.py', '--questions=5A', '--rate-limit=15']
+    env:
+      - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+      - 'GOOGLE_CLOUD_LOCATION=us-central1'
+
+  # Step 4: Run all tests
+  - name: 'python:3.11'
+    entrypoint: 'python'
+    args: ['tests/test_gemini_vertex.py', '--questions=all', '--rate-limit=15']
+    env:
+      - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+      - 'GOOGLE_CLOUD_LOCATION=us-central1'
+
+# Save test results as artifacts
+artifacts:
+  objects:
+    location: 'gs://${PROJECT_ID}_cloudbuild/lawstronaut-results'
+    paths: ['gemini_vertex_results.json']
+
+# Enable required APIs
+serviceAccount: 'projects/$PROJECT_ID/serviceAccounts/$_SERVICE_ACCOUNT_EMAIL'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '1800s'  # 30 minutes

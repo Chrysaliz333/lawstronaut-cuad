@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Excel temp files
+~$*.xlsx
+~$*.xls
+
+# Environment variables
+.env
+.env.local
+
+# Large data files (use Git LFS or external storage)
+*.csv
+*.json
+full_contract_pdf/
+full_contract_txt/
+label_group_xlsx/
+
+# Test outputs
+*_results.json
+gemini_*.json
+
+# GCP
+.gcloud/
+credentials.json
+service-account-key.json
+
+# Logs
+*.log
+logs/
