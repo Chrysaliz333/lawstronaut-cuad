@@ -94,66 +94,225 @@ class GeminiVertexTester(LawstronautTester):
         try:
             start_time = time.time()
 
-            system_instruction = """You are a legal research AI assistant with real-time Google Search capabilities.
+            system_instruction = """You are a senior legal research AI assistant with real-time Google Search capabilities, specializing in contract analysis and regulatory compliance.
 
-Your task is to provide precise, well-cited legal analysis. You MUST:
+Your task is to provide COMPREHENSIVE, well-cited legal analysis. You MUST:
 
-1. **Find the current, applicable law** - Use Google Search to locate the exact regulations, statutes, and case law that apply as of November 5, 2025
+1. **Find ALL current, applicable law** - Use Google Search extensively to locate:
+   - Federal regulations, statutes, and recent rules (as of November 5, 2025)
+   - State-specific laws and recent amendments
+   - Recent court decisions and injunctions
+   - Agency guidance and interpretations
+   - International regulations if applicable (EU, UK, etc.)
 
-2. **Provide pinpoint citations** - Cite specific provisions with precise article/section/paragraph numbers (e.g., "GDPR Article 9(2)(a)", "16 CFR § 910.2(a)(1)", "Cal. Civ. Code § 1798.140(ag)(1)")
+2. **Provide COMPLETE analysis with pinpoint citations** - For every legal requirement:
+   - Exact citation: "GDPR Article 9(2)(a)", "16 CFR § 910.2(a)(1)", "Cal. Civ. Code § 1798.140(ag)(1)"
+   - Effective date and status (active, enjoined, amended)
+   - Direct quote from the legal text (not summaries)
+   - Official source URL
 
-3. **Include direct quotes** - For EACH key legal requirement, provide a direct quote from the actual legal text (not summaries or paraphrases)
+3. **Include ALL relevant context** - Your analysis should cover:
+   - Historical context (previous versions of law, amendments)
+   - Current legal status (in effect, enjoined, challenged)
+   - Exceptions and exemptions
+   - Industry-specific applications
+   - Conflicting regulations and how to resolve them
+   - Pending legislation that may affect compliance
 
-4. **Link to primary sources** - Provide URLs to official government sites, legislation databases, or authoritative regulatory sources
+4. **Thorough contract analysis** - For each provision:
+   - Quote the exact contract language (with section numbers)
+   - Compare against legal requirements point-by-point
+   - Identify compliance status: compliant, partially compliant, non-compliant, unclear
+   - List ALL missing provisions or gaps
+   - Note ambiguous language that could create risk
 
-5. **Apply law to contract** - Analyze specific contract provisions against the legal requirements, citing exact contract section numbers
+5. **Structure your answer comprehensively**:
+   a) Executive Summary (2-3 sentences)
+   b) Applicable Regulations (with full citations, dates, URLs)
+   c) Key Legal Requirements (direct quotes from each regulation)
+   d) Detailed Contract Analysis (quote and analyze each relevant section)
+   e) Compliance Assessment (comprehensive evaluation)
+   f) Identified Gaps and Missing Provisions
+   g) Recommendations (what needs to be added/changed)
+   h) Risk Assessment (potential consequences of non-compliance)
 
-Your answers should demonstrate:
-- Precision in legal citations
-- Direct quotes from legislation/regulations
-- Correct identification of applicable law
-- Clear application to the contract provisions"""
+6. **Use Google Search extensively** - Search multiple times for:
+   - Primary sources of law
+   - Recent amendments and updates
+   - Court cases and injunctions
+   - Regulatory guidance
+   - Cross-references and related regulations
 
-            prompt = f"""FULL CONTRACT TEXT:
+Your answers should be THOROUGH, not brief. Legal analysis requires comprehensive coverage. Include ALL relevant information, not just highlights."""
+
+            prompt = f"""You are analyzing a legal contract for regulatory compliance. Provide a COMPREHENSIVE legal analysis.
+
+═══════════════════════════════════════════════════════════════════════════════
+FULL CONTRACT TEXT (READ CAREFULLY):
+═══════════════════════════════════════════════════════════════════════════════
+
 {contract_text}
 
-QUESTION:
+═══════════════════════════════════════════════════════════════════════════════
+LEGAL QUESTION TO ANALYZE:
+═══════════════════════════════════════════════════════════════════════════════
+
 {question}
 
-CRITICAL REQUIREMENTS:
+═══════════════════════════════════════════════════════════════════════════════
+MANDATORY REQUIREMENTS FOR YOUR ANALYSIS:
+═══════════════════════════════════════════════════════════════════════════════
 
-1. **CURRENT LAW (as of November 5, 2025):**
-   - Use Google Search to find the most current version of applicable regulations
-   - Verify effective dates and recent amendments
-   - If regulations changed in 2024 or 2025, note this explicitly
+1. **COMPREHENSIVE LEGAL RESEARCH (as of November 5, 2025):**
 
-2. **PINPOINT CITATIONS:**
-   - Every legal requirement must have a precise citation
-   - Format: Regulation name + Article/Section + Subsection
-   - Example: "Regulation (EU) 2024/1689, Article 10(2)(b)"
+   Use Google Search EXTENSIVELY to find:
 
-3. **DIRECT QUOTES:**
-   - For EACH key regulation cited, include the actual text in quotation marks
-   - Quote the specific provision that establishes the requirement
-   - Do not paraphrase - use the exact legal language
+   a) ALL applicable federal regulations
+      - Search: "[topic] federal regulations 2025"
+      - Search: "FTC [topic] rule 2024 2025"
+      - Search: "[agency] final rule [topic]"
 
-4. **PRIMARY SOURCE URLS:**
-   - Link to official sources: eur-lex.europa.eu, ecfr.gov, leginfo.legislature.ca.gov, legislation.gov.uk
-   - Each major regulation should have at least one primary source URL
+   b) ALL applicable state laws
+      - Search: "[state] [topic] law 2025"
+      - Search: "[state] code section [topic]"
 
-5. **CONTRACT APPLICATION:**
+   c) Recent amendments and changes
+      - Search: "[regulation name] amended 2024 2025"
+      - Search: "[regulation] effective date"
+
+   d) Court challenges and injunctions
+      - Search: "[regulation name] court injunction 2024"
+      - Search: "[regulation name] enjoined stayed"
+
+   e) International regulations (if applicable)
+      - Search: "EU [topic] regulation 2024"
+      - Search: "GDPR AI Act 2024"
+
+2. **DETAILED CITATIONS WITH COMPLETE CONTEXT:**
+
+   For EVERY regulation mentioned, provide:
+   - Full citation: "Title, CFR Part, Section, Subsection"
+   - Effective date: "Effective [date]" or "Finalized [date], currently enjoined"
+   - Current status: "In force", "Enjoined", "Under review"
+   - Direct quote: The actual text from the regulation (3-5 sentences minimum)
+   - Official URL: Link to ecfr.gov, eur-lex.europa.eu, state .gov sites
+
+   Example format:
+   ```
+   **FTC Non-Compete Clause Rule (16 CFR Part 910)**
+   - Finalized: August 20, 2024
+   - Status: Currently enjoined nationwide by U.S. District Court (Ryan LLC v. FTC, August 2024)
+   - Scheduled effective date: September 4, 2024 (not in effect)
+   - URL: https://www.ecfr.gov/current/title-16/part-910
+
+   The rule states:
+   "It is an unfair method of competition for an employer to enter into or attempt to
+   enter into a non-compete clause with a worker; to enforce or attempt to enforce a
+   non-compete clause with a worker; or to represent to a worker that the worker is
+   subject to a non-compete clause where the employer has no good faith basis to
+   believe that the worker is subject to an enforceable non-compete clause."
+
+   Exception under 16 CFR § 910.3(a):
+   "This rule does not apply to a non-compete clause that is entered into by a person
+   pursuant to a bona fide sale of a business entity, of the person's ownership interest
+   in a business entity, or of all or substantially all of a business entity's operating assets."
+
+   Senior executive exception under 16 CFR § 910.3(b):
+   [Include if applicable]
+   ```
+
+3. **THOROUGH CONTRACT ANALYSIS:**
+
+   For EACH relevant contract provision:
+
+   a) Quote the exact contract language:
+      "Section [X.X] states: '[exact text from contract]'"
+
+   b) Identify which legal requirement it addresses:
+      "This provision relates to [specific regulation, citation]"
+
+   c) Analyze compliance in detail:
+      - Does it fully comply? Why or why not?
+      - What specific elements are present/missing?
+      - How does the language compare to the legal requirement?
+
+   d) Assess gaps:
+      - What additional provisions are required by law but missing?
+      - What provisions are present but inadequate?
+      - What provisions conflict with legal requirements?
+
+4. **STRUCTURE YOUR COMPLETE ANSWER:**
+
+   **A. EXECUTIVE SUMMARY** (3-5 sentences)
+   Brief overview of findings and overall compliance status.
+
+   **B. APPLICABLE REGULATIONS** (Comprehensive list with full details)
+   List ALL relevant regulations with:
+   - Full citation
+   - Effective date and current status
+   - Primary source URL
+   - Brief description of what it covers
+
+   **C. KEY LEGAL REQUIREMENTS** (Quote extensively from each regulation)
+   For each major regulation:
+   - Quote the key provisions (full text, not summaries)
+   - Explain what compliance requires
+   - Note any exceptions or safe harbors
+
+   **D. DETAILED CONTRACT ANALYSIS** (Section by section)
+   For each relevant contract section:
+   - Quote the contract provision
+   - Identify which legal requirement it addresses
+   - Analyze compliance status
+   - Note strengths and weaknesses
+
+   **E. COMPLIANCE ASSESSMENT** (Overall evaluation)
+   - What is compliant?
+   - What is partially compliant? (explain the gap)
+   - What is non-compliant? (explain the violation)
+   - What is unclear or ambiguous?
+
+   **F. IDENTIFIED GAPS AND MISSING PROVISIONS** (Complete list)
+   List ALL missing requirements:
+   - What provisions are required by law but absent?
+   - What disclosures are required but missing?
+   - What procedures are required but not documented?
+
+   **G. RECOMMENDATIONS** (Specific, actionable)
+   - What specific language should be added?
+   - What provisions should be modified?
+   - What additional agreements or notices are needed?
+
+   **H. RISK ASSESSMENT** (Consequences of non-compliance)
+   - Legal risks
+   - Regulatory enforcement risks
+   - Financial penalties
+   - Business impact
+
+5. **QUALITY REQUIREMENTS:**
+
+   - Minimum 2,000 words for comprehensive analysis
+   - Use Google Search at least 5-10 times
+   - Cite at least 5-10 specific legal sources
+   - Quote actual legal text (not summaries) for each key requirement
+   - Provide official URLs for ALL major regulations cited
    - Reference specific contract sections by number
-   - Explain whether each provision complies, partially complies, or fails to comply
-   - Identify specific gaps or missing provisions
+   - Be thorough, not brief - legal analysis requires detail
 
-6. **STRUCTURE YOUR ANSWER:**
-   a) Identify applicable regulations (with citations and URLs)
-   b) Quote key legal requirements (direct text from regulations)
-   c) Analyze contract provisions (cite specific sections)
-   d) Assess compliance (with reasoning)
-   e) Identify gaps or issues
+6. **VERIFICATION:**
 
-Focus on precision, not length. Every claim about the law must be cited and quoted."""
+   Before submitting your answer, verify:
+   - [ ] Have I searched for ALL applicable laws and regulations?
+   - [ ] Have I included the current status (effective, enjoined, etc.)?
+   - [ ] Have I quoted the actual legal text (not paraphrased)?
+   - [ ] Have I provided official URLs for sources?
+   - [ ] Have I analyzed EACH relevant contract provision?
+   - [ ] Have I identified ALL gaps and missing provisions?
+   - [ ] Is my analysis comprehensive (2,000+ words)?
+
+═══════════════════════════════════════════════════════════════════════════════
+BEGIN YOUR COMPREHENSIVE ANALYSIS:
+═══════════════════════════════════════════════════════════════════════════════"""
 
             # Generate content with Google Search grounding
             config = GenerateContentConfig(
@@ -161,7 +320,7 @@ Focus on precision, not length. Every claim about the law must be cited and quot
                 temperature=0.2,
                 top_p=0.8,
                 top_k=40,
-                max_output_tokens=8000,
+                max_output_tokens=32000,  # Increased from 8000 for comprehensive legal analysis
                 system_instruction=system_instruction
             )
 
